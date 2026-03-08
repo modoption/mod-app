@@ -696,7 +696,8 @@ async function initNotifications() {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return;
     if (!('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const swPath = location.pathname.replace(/\/[^\/]*$/, '/') + 'firebase-messaging-sw.js';
+    const reg = await navigator.serviceWorker.register(swPath);
     const fcmToken = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
     if (fcmToken && user?.token) {
       await fetch(`${API}/fcm-token`, {
