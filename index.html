@@ -205,6 +205,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid rgba(0,229,160,0.3);border-radius:12px;padding:12px 24px;font-size:13px;color:var(--green);z-index:999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 </head>
 <body>
 
@@ -407,6 +409,7 @@ function showApp() {
   loadContracts();
   setInterval(loadContracts, 30000);
   initPTR();
+  initNotifications();
 }
 
 // ── LOGIN ──
@@ -669,6 +672,46 @@ function showToast(msg) {
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
+</script>
+
+<script>
+// ── Firebase Config ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDXY3ZTUpPAi2iL3Y_XvQReqneomTbYbd0",
+  authDomain: "mod-options-lmql3k.firebaseapp.com",
+  projectId: "mod-options-lmql3k",
+  storageBucket: "mod-options-lmql3k.firebasestorage.app",
+  messagingSenderId: "764195037121",
+  appId: "1:764195037121:web:2cae80f08af37921f3d940"
+};
+
+const VAPID_KEY = "BCwRaYBP7i8xlHHW7XuVTksmRdchEuKej8ZrzlBMizm7bsoQWM0bXxiviuk9u5PNLCnnrdr2HqHpKlM40nMjOWQ";
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+async function initNotifications() {
+  try {
+    if (!('Notification' in window)) return;
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    if (!('serviceWorker' in navigator)) return;
+    const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const fcmToken = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+    if (fcmToken && user?.token) {
+      await fetch(`${API}/fcm-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': user.token, 'x-phone': user.phone },
+        body: JSON.stringify({ fcmToken })
+      });
+    }
+  } catch(e) { console.log('FCM init error:', e); }
+}
+
+messaging.onMessage((payload) => {
+  const n = payload.notification;
+  showToast(`${n.title}: ${n.body}`);
+});
 </script>
 </body>
 </html>
