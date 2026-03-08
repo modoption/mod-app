@@ -698,6 +698,7 @@ async function initNotifications() {
     if (!('serviceWorker' in navigator)) return;
     const swPath = location.pathname.replace(/\/[^\/]*$/, '/') + 'firebase-messaging-sw.js';
     const reg = await navigator.serviceWorker.register(swPath);
+    await navigator.serviceWorker.ready;
     const fcmToken = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
     if (fcmToken && user?.token) {
       await fetch(`${API}/fcm-token`, {
