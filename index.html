@@ -3,275 +3,674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#060c1a">
+<meta name="theme-color" content="#03080f">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MOD">
 <title>MOD | Options</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  --bg:#060c1a; --bg2:#0d1628; --bg3:#111e35;
-  --blue:#1e6fff; --blue-bright:#4d8fff;
-  --silver:#a8bcd4; --silver-light:#d4e1f0; --white:#f0f6ff;
-  --green:#00e5a0; --red:#ff3d6b; --gold:#ffc84a;
-  --border:rgba(100,160,255,0.12);
+  --bg:     #03080f;
+  --bg1:    #060e1c;
+  --bg2:    #0a1628;
+  --bg3:    #0f1e35;
+  --bg4:    #162540;
+  --blue:   #0d6efd;
+  --blue2:  #3d8bfd;
+  --blue3:  #6ea8fe;
+  --cyan:   #00d4ff;
+  --green:  #00e5a0;
+  --green2: #00ff88;
+  --red:    #ff3860;
+  --gold:   #ffd060;
+  --silver: #7a9cc0;
+  --light:  #c8dff5;
+  --white:  #eaf4ff;
+  --border: rgba(13,110,253,0.15);
+  --border2:rgba(13,110,253,0.08);
+  --glow:   0 0 40px rgba(13,110,253,0.2);
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{background:var(--bg);color:var(--white);font-family:'Tajawal',sans-serif;max-width:430px;margin:0 auto;height:100%;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(30,111,255,0.12) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 20% 80%,rgba(0,229,160,0.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
 
-/* ── SCREENS ── */
-.screen{position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:50;display:none;flex-direction:column;overflow-y:auto;align-items:center;justify-content:center;padding:24px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{color:var(--white);font-family:'Cairo',sans-serif;max-width:430px;margin:0 auto;position:relative;}
+
+/* ─── NOISE OVERLAY ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.4;
+}
+
+/* ─── AMBIENT GLOWS ─── */
+body::after{
+  content:'';position:fixed;
+  top:-20%;right:-10%;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(13,110,253,0.08) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+/* ─── SCREENS ─── */
+.screen{
+  position:fixed;inset:0;max-width:430px;margin:0 auto;
+  z-index:50;display:none;flex-direction:column;
+  overflow-y:auto;align-items:center;justify-content:center;padding:24px;
+}
 .screen.show{display:flex;}
 
-/* SPLASH */
-#splash{background:var(--bg);z-index:100;}
-.splash-logo{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;letter-spacing:8px;background:linear-gradient(135deg,#4d8fff 0%,#a8d4ff 50%,#ffc84a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:splashIn 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;}
-.splash-sub{font-size:10px;letter-spacing:4px;color:var(--silver);font-family:'IBM Plex Mono',monospace;margin-top:8px;opacity:0;animation:fadeUp 0.5s 0.4s ease forwards;}
-@keyframes splashIn{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* ─── SPLASH ─── */
+#splash{
+  background:var(--bg);z-index:100;
+  flex-direction:column;align-items:center;justify-content:center;gap:0;
+}
+.splash-ring{
+  width:120px;height:120px;border-radius:50%;
+  border:1px solid rgba(13,110,253,0.3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;animation:ringPulse 2s ease-in-out infinite;
+}
+.splash-ring::before{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(13,110,253,0.15);
+  animation:ringPulse 2s ease-in-out infinite 0.3s;
+}
+.splash-ring::after{
+  content:'';position:absolute;inset:-16px;border-radius:50%;
+  border:1px solid rgba(13,110,253,0.08);
+  animation:ringPulse 2s ease-in-out infinite 0.6s;
+}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:0.7}}
+.splash-logo-inner{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px;letter-spacing:6px;
+  background:linear-gradient(160deg,#6ea8fe 0%,#ffffff 40%,#ffd060 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoReveal 1s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes logoReveal{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+.splash-tagline{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  letter-spacing:5px;color:var(--silver);margin-top:20px;
+  opacity:0;animation:fadeSlide 0.5s 0.6s ease forwards;
+}
+.splash-bar{
+  width:140px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--blue),var(--cyan),var(--blue),transparent);
+  margin-top:24px;
+  opacity:0;animation:fadeSlide 0.5s 0.9s ease forwards;
+}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* AUTH BOX */
-.auth-box{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:32px 28px;position:relative;overflow:hidden;animation:fadeUp 0.4s ease;}
-.auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--gold),var(--blue));}
-.auth-logo{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:5px;background:linear-gradient(135deg,#4d8fff,#ffc84a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:4px;}
-.auth-sub{font-size:10px;letter-spacing:3px;color:var(--silver);font-family:'IBM Plex Mono',monospace;text-align:center;margin-bottom:24px;}
-.auth-title{font-size:18px;font-weight:700;margin-bottom:20px;text-align:center;}
+/* ─── AUTH ─── */
+.auth-wrap{width:100%;max-width:380px;}
+.auth-card{
+  background:linear-gradient(160deg,var(--bg2) 0%,var(--bg1) 100%);
+  border:1px solid var(--border);border-radius:24px;
+  padding:32px 28px 28px;position:relative;overflow:hidden;
+  animation:cardIn 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.auth-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--blue2),var(--cyan),var(--blue2),transparent);
+}
+.auth-card::after{
+  content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(13,110,253,0.12),transparent 70%);
+  pointer-events:none;
+}
+.auth-logo-wrap{text-align:center;margin-bottom:24px;position:relative;z-index:1;}
+.auth-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:8px;
+  background:linear-gradient(135deg,#6ea8fe,#fff,#ffd060);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.auth-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  letter-spacing:4px;color:var(--silver);margin-top:2px;
+}
+.auth-title{
+  font-size:15px;font-weight:600;color:var(--light);
+  text-align:center;margin-bottom:22px;position:relative;z-index:1;
+}
 
-.inp-group{margin-bottom:14px;}
-.inp-label{font-size:11px;color:var(--silver);letter-spacing:1px;margin-bottom:6px;display:block;}
-.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--white);font-size:14px;font-family:'Tajawal',sans-serif;outline:none;transition:border-color 0.2s;}
-.inp:focus{border-color:var(--blue);}
-.inp.code{font-family:'IBM Plex Mono',monospace;letter-spacing:3px;text-align:center;font-size:16px;}
-.inp.ltr{direction:ltr;text-align:left;}
+.field{margin-bottom:14px;position:relative;z-index:1;}
+.field-label{
+  font-size:10px;letter-spacing:1.5px;color:var(--silver);
+  font-family:'IBM Plex Mono',monospace;margin-bottom:7px;display:block;
+  text-transform:uppercase;
+}
+.field-input{
+  width:100%;background:rgba(255,255,255,0.03);
+  border:1px solid rgba(13,110,253,0.2);border-radius:12px;
+  padding:13px 16px;color:var(--white);
+  font-size:14px;font-family:'Cairo',sans-serif;
+  outline:none;transition:all 0.2s;
+}
+.field-input:focus{
+  border-color:var(--blue2);
+  background:rgba(13,110,253,0.05);
+  box-shadow:0 0 0 3px rgba(13,110,253,0.1);
+}
+.field-input.mono{
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:4px;text-align:center;font-size:15px;
+}
+.field-input.ltr{direction:ltr;text-align:left;}
+.field-err{
+  font-size:11px;color:var(--red);margin-top:5px;
+  font-family:'IBM Plex Mono',monospace;
+  display:none;padding-right:4px;
+}
+.field-err.show{display:block;}
 
-.auth-btn{width:100%;background:var(--blue);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all 0.2s;margin-top:6px;}
-.auth-btn:hover{background:var(--blue-bright);transform:translateY(-1px);}
-.auth-btn:active{transform:translateY(0);}
-.auth-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--silver);}
-.auth-switch a{color:var(--blue-bright);cursor:pointer;}
+.btn-primary{
+  width:100%;background:var(--blue);color:white;border:none;
+  border-radius:12px;padding:14px;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:'Cairo',sans-serif;
+  transition:all 0.2s;margin-top:8px;position:relative;overflow:hidden;
+  letter-spacing:1px;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+  transform:translateX(-100%);transition:transform 0.4s;
+}
+.btn-primary:hover{background:var(--blue2);}
+.btn-primary:hover::before{transform:translateX(100%);}
+.btn-primary:active{transform:scale(0.98);}
 
-.err{font-size:11px;color:var(--red);margin-top:5px;display:none;}
-.err.show{display:block;}
+.btn-ghost{
+  width:100%;background:transparent;color:var(--silver);
+  border:1px solid var(--border);border-radius:12px;
+  padding:12px;font-size:13px;cursor:pointer;
+  font-family:'Cairo',sans-serif;transition:all 0.2s;margin-top:8px;
+}
+.btn-ghost:hover{border-color:var(--blue2);color:var(--blue3);}
+.btn-ghost:active{transform:scale(0.98);}
 
-/* PENDING */
-.pending-icon{font-size:56px;text-align:center;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.pending-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:8px;}
-.pending-sub{font-size:13px;color:var(--silver);text-align:center;line-height:1.6;margin-bottom:20px;}
-.pending-info{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;}
-.pi-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);}
+.auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--silver);}
+.auth-switch a{color:var(--blue3);cursor:pointer;text-decoration:none;}
+
+/* ─── PENDING ─── */
+.pending-icon{font-size:52px;text-align:center;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.pending-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;text-align:center;margin-bottom:8px;color:var(--gold);}
+.pending-sub{font-size:13px;color:var(--silver);text-align:center;line-height:1.7;margin-bottom:20px;}
+.wait-badge{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,208,96,0.07);border:1px solid rgba(255,208,96,0.2);
+  border-radius:12px;padding:12px;font-size:12px;color:var(--gold);
+  margin-bottom:16px;font-family:'IBM Plex Mono',monospace;letter-spacing:1px;
+}
+.wdot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.pending-info{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border2);
+  border-radius:14px;padding:14px;margin-bottom:14px;
+}
+.pi-row{
+  display:flex;justify-content:space-between;font-size:12px;
+  padding:7px 0;border-bottom:1px solid var(--border2);
+}
 .pi-row:last-child{border-bottom:none;}
 .pi-key{color:var(--silver);}
-.pi-val{font-family:'IBM Plex Mono',monospace;}
-.wait-badge{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,200,74,0.08);border:1px solid rgba(255,200,74,0.2);border-radius:12px;padding:12px;font-size:13px;color:var(--gold);margin-bottom:14px;}
-.wdot{width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
-.ghost-btn{width:100%;background:transparent;color:var(--silver);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all 0.2s;margin-top:8px;}
-.ghost-btn:hover{border-color:var(--blue);color:var(--blue-bright);}
+.pi-val{font-family:'IBM Plex Mono',monospace;color:var(--light);}
 
-/* ── MAIN APP ── */
-#app{background:var(--bg);display:none;flex-direction:column;height:100%;position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:50;}
+/* ─── MAIN APP ─── */
+#app{
+  background:var(--bg);display:none;flex-direction:column;
+  height:100%;position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:50;
+}
 #app.show{display:flex;}
 
-.topbar{flex-shrink:0;background:rgba(6,12,26,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:4px;background:linear-gradient(135deg,#4d8fff 0%,#a8d4ff 50%,#ffc84a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.logo-sub{font-size:9px;letter-spacing:3px;color:var(--silver);text-transform:uppercase;display:block;margin-top:-4px;font-family:'IBM Plex Mono',monospace;}
-.notif-btn{width:40px;height:40px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:18px;}
-.notif-btn:active{transform:scale(0.93);}
+/* TOPBAR */
+.topbar{
+  flex-shrink:0;
+  background:rgba(3,8,15,0.95);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border2);
+  padding:14px 18px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:10;
+}
+.topbar::after{
+  content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,110,253,0.4),transparent);
+}
+.top-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:5px;
+  background:linear-gradient(135deg,#6ea8fe,#fff 50%,#ffd060);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.top-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:8px;
+  letter-spacing:3px;color:var(--silver);display:block;margin-top:-3px;
+}
+.notif-btn{
+  width:38px;height:38px;border-radius:12px;
+  background:rgba(13,110,253,0.08);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:17px;transition:all 0.2s;position:relative;
+}
+.notif-btn:active{transform:scale(0.9);}
+.notif-dot{
+  position:absolute;top:6px;right:6px;width:7px;height:7px;
+  background:var(--red);border-radius:50%;border:2px solid var(--bg);
+  display:none;
+}
+.notif-dot.show{display:block;}
 
-.nav-tabs{flex-shrink:0;display:flex;padding:10px 20px 0;background:rgba(6,12,26,0.96);border-bottom:1px solid var(--border);}
-.tab{flex:1;padding:10px 6px;text-align:center;font-size:11px;font-weight:500;color:var(--silver);border-bottom:2px solid transparent;cursor:pointer;transition:all 0.25s;}
-.tab.active{color:var(--blue-bright);border-bottom-color:var(--blue);}
-.tab span{display:block;font-size:17px;margin-bottom:3px;}
+/* NAV TABS */
+.nav-tabs{
+  flex-shrink:0;display:flex;
+  background:rgba(3,8,15,0.95);
+  border-bottom:1px solid var(--border2);
+  padding:0 8px;
+}
+.tab{
+  flex:1;padding:10px 4px 12px;text-align:center;
+  font-size:10px;font-weight:600;color:var(--silver);
+  border-bottom:2px solid transparent;cursor:pointer;
+  transition:all 0.25s;font-family:'IBM Plex Mono',monospace;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.tab.active{color:var(--blue3);border-bottom-color:var(--blue);}
+.tab-icon{display:block;font-size:18px;margin-bottom:3px;}
 
-.pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
-.page{display:none;padding:16px 16px 90px;animation:fadeUp 0.3s ease;}
+/* PAGES */
+.pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
+.pages::-webkit-scrollbar{width:0;}
+.page{display:none;padding:16px 14px 100px;animation:pageIn 0.3s ease;}
 .page.active{display:block;}
-
-.bottom-nav{flex-shrink:0;background:rgba(6,12,26,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:8px 0 20px;z-index:10;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:all 0.2s;padding:6px 0;}
-.nav-item:active{transform:scale(0.9);}
-.nav-icon{font-size:21px;}
-.nav-label{font-size:10px;color:var(--silver);letter-spacing:0.5px;}
-.nav-item.active .nav-icon{filter:drop-shadow(0 0 8px var(--blue));}
-.nav-item.active .nav-label{color:var(--blue-bright);}
-
-/* FILTER */
-.filter-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;}
-.filter-bar::-webkit-scrollbar{display:none;}
-.filter-btn{flex-shrink:0;padding:7px 16px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:var(--bg2);color:var(--silver);cursor:pointer;transition:all 0.2s;font-family:'IBM Plex Mono',monospace;}
-.filter-btn.active{background:rgba(30,111,255,0.15);border-color:rgba(30,111,255,0.4);color:var(--blue-bright);}
-
-/* LIVE */
-.live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,61,107,0.1);border:1px solid rgba(255,61,107,0.3);border-radius:8px;padding:5px 12px;font-size:10px;font-weight:700;color:var(--red);letter-spacing:2px;font-family:'IBM Plex Mono',monospace;margin-bottom:14px;}
-.live-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1s infinite;}
-
-/* CONTRACT CARD */
-.signal-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;margin-bottom:14px;overflow:hidden;transition:all 0.25s;cursor:pointer;}
-.signal-card:active{transform:scale(0.98);}
-.signal-card.hot{border-color:rgba(255,200,74,0.3);}
-.signal-header{padding:16px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
-.signal-ticker{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);letter-spacing:1px;}
-.signal-type-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;margin-top:4px;}
-.signal-type-badge.call{background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);color:var(--green);}
-.signal-type-badge.put{background:rgba(255,61,107,0.12);border:1px solid rgba(255,61,107,0.3);color:var(--red);}
-.signal-status{text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-.status-pill{font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:1px;font-family:'IBM Plex Mono',monospace;}
-.status-pill.active-now{background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.4);color:var(--blue-bright);animation:blinkB 2s infinite;}
-.status-pill.closed-win{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);color:var(--green);}
-.status-pill.closed-loss{background:rgba(255,61,107,0.1);border:1px solid rgba(255,61,107,0.3);color:var(--red);}
-@keyframes blinkB{0%,100%{border-color:rgba(30,111,255,0.4)}50%{border-color:rgba(30,111,255,0.9)}}
-.signal-time{font-size:10px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
-
-.contract-img-wrap{margin:0 16px 14px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--bg3);}
-.contract-img{width:100%;height:auto;display:block;}
-.contract-img-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--silver);}
-.contract-img-ph .icon{font-size:32px;opacity:0.4;}
-.contract-img-ph p{font-size:12px;opacity:0.5;}
-.contract-body{padding:0 16px 16px;}
-.contract-meta{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.meta-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--silver-light);font-family:'IBM Plex Mono',monospace;}
-.targets-label{font-size:10px;color:var(--silver);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:'IBM Plex Mono',monospace;}
-.targets-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.target-pill{display:flex;align-items:center;gap:4px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:5px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--green);}
-.warning-box{display:flex;align-items:flex-start;gap:8px;background:rgba(255,200,74,0.07);border:1px solid rgba(255,200,74,0.2);border-radius:12px;padding:10px 12px;font-size:11px;color:var(--gold);line-height:1.5;}
-
-/* PERF */
-.perf-hero{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;}
-.perf-hero::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:180px;height:180px;background:radial-gradient(circle,rgba(30,111,255,0.18),transparent 70%);}
-.perf-rate{font-family:'Syne',sans-serif;font-size:60px;font-weight:800;background:linear-gradient(135deg,var(--green),#00ffcc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;position:relative;}
-.perf-rate-label{font-size:13px;color:var(--silver);margin-top:6px;letter-spacing:1px;}
-.perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.perf-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px;}
-.perf-card-val{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:500;margin-bottom:4px;}
-.perf-card-val.green{color:var(--green);}
-.perf-card-val.red{color:var(--red);}
-.perf-card-label{font-size:11px;color:var(--silver);}
-.month-chart{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:16px;}
-.sec-title{font-size:12px;font-weight:700;color:var(--silver-light);letter-spacing:2px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;}
-.bars{display:flex;align-items:flex-end;gap:8px;height:80px;margin-top:16px;}
-.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
-.bar{width:100%;border-radius:6px 6px 0 0;}
-.bar-label{font-size:9px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
-.bar-val{font-size:9px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
-
-/* PROFILE */
-.profile-header{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:14px;text-align:center;}
-.avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-bright));margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:white;border:3px solid rgba(77,143,255,0.3);}
-.profile-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px;}
-.profile-role{font-size:11px;color:var(--blue-bright);letter-spacing:2px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;}
-.sub-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;}
-.sub-card:active{transform:scale(0.98);}
-.sub-card-left{display:flex;align-items:center;gap:12px;}
-.sub-icon{width:38px;height:38px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;}
-.sub-label{font-size:13px;font-weight:500;}
-.sub-desc{font-size:11px;color:var(--silver);margin-top:2px;}
-.sub-arrow{color:var(--silver);font-size:18px;}
-.sub-active{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--green);background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);padding:3px 10px;border-radius:20px;}
-.logout-row{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;color:var(--red);font-size:13px;cursor:pointer;border-radius:12px;transition:all 0.2s;}
-.logout-row:hover{background:rgba(255,61,107,0.08);}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:200;display:none;align-items:flex-end;justify-content:center;max-width:430px;margin:0 auto;}
-.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:28px 28px 0 0;width:100%;padding:20px 20px 40px;animation:slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);max-height:85vh;overflow-y:auto;}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 20px;}
-.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:16px;}
-.modal-img-wrap{width:100%;height:200px;background:var(--bg3);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.detail-row:last-of-type{border-bottom:none;}
-.detail-key{color:var(--silver);}
-.detail-val{font-family:'IBM Plex Mono',monospace;font-weight:500;}
-.detail-val.call{color:var(--green);}
-.detail-val.put{color:var(--red);}
-.detail-val.gold{color:var(--gold);}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* PTR */
-.ptr{display:flex;align-items:center;justify-content:center;gap:8px;height:0;overflow:hidden;transition:height 0.2s;font-size:12px;color:var(--silver);}
-.ptr.show{height:40px;}
-.ptr-spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;}
+.ptr{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  height:0;overflow:hidden;transition:height 0.25s;
+  font-size:11px;color:var(--silver);font-family:'IBM Plex Mono',monospace;
+}
+.ptr.show{height:44px;}
+.ptr-spin{
+  width:14px;height:14px;
+  border:2px solid rgba(13,110,253,0.2);border-top-color:var(--blue2);
+  border-radius:50%;animation:spin 0.7s linear infinite;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* EMPTY */
-.empty-state{text-align:center;padding:48px 20px;color:var(--silver);}
-.empty-state .icon{font-size:40px;margin-bottom:12px;display:block;}
-.empty-state p{font-size:13px;}
+/* BOTTOM NAV */
+.bottom-nav{
+  flex-shrink:0;
+  background:rgba(3,8,15,0.97);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-top:1px solid var(--border2);
+  display:flex;padding:8px 0 max(20px, env(safe-area-inset-bottom));
+  position:relative;
+}
+.bottom-nav::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,110,253,0.3),transparent);
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;transition:all 0.2s;padding:6px 0;
+}
+.nav-item:active{transform:scale(0.88);}
+.nav-icon{font-size:20px;transition:all 0.2s;}
+.nav-label{font-size:9px;color:var(--silver);letter-spacing:1px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;}
+.nav-item.active .nav-label{color:var(--blue3);}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 10px var(--blue2));}
 
-/* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid rgba(0,229,160,0.3);border-radius:12px;padding:12px 24px;font-size:13px;color:var(--green);z-index:999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+/* ─── CONTRACTS ─── */
+.filter-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
+.filter-bar::-webkit-scrollbar{display:none;}
+.filter-btn{
+  flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;
+  border:1px solid var(--border2);background:transparent;color:var(--silver);
+  cursor:pointer;transition:all 0.2s;font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.5px;
+}
+.filter-btn.active{
+  background:rgba(13,110,253,0.12);
+  border-color:rgba(13,110,253,0.35);color:var(--blue3);
+}
+
+.live-strip{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.live-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,56,96,0.08);border:1px solid rgba(255,56,96,0.25);
+  border-radius:8px;padding:5px 12px;
+  font-size:10px;font-weight:700;color:var(--red);
+  letter-spacing:2px;font-family:'IBM Plex Mono',monospace;
+}
+.live-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1s infinite;}
+.live-count{font-size:10px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
+
+/* CONTRACT CARD */
+.signal-card{
+  background:linear-gradient(160deg,var(--bg2) 0%,var(--bg1) 100%);
+  border:1px solid var(--border2);border-radius:20px;
+  margin-bottom:12px;overflow:hidden;
+  transition:transform 0.2s,border-color 0.2s;cursor:pointer;
+  position:relative;
+}
+.signal-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,110,253,0.3),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.signal-card:active{transform:scale(0.985);}
+.signal-card.hot{border-color:rgba(13,110,253,0.2);}
+.signal-card.hot::before{opacity:1;}
+
+.card-top{padding:14px 14px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.card-ticker{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;
+  color:var(--white);line-height:1;
+}
+.card-type{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 11px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  font-family:'IBM Plex Mono',monospace;margin-top:5px;
+}
+.card-type.call{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);color:var(--green);}
+.card-type.put{background:rgba(255,56,96,0.1);border:1px solid rgba(255,56,96,0.25);color:var(--red);}
+.card-right{text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.status-pill{
+  font-size:9px;font-weight:700;padding:4px 11px;border-radius:20px;
+  letter-spacing:1.5px;font-family:'IBM Plex Mono',monospace;
+}
+.status-pill.active-now{
+  background:rgba(13,110,253,0.12);border:1px solid rgba(13,110,253,0.3);
+  color:var(--blue3);animation:blinkBorder 2.5s infinite;
+}
+@keyframes blinkBorder{0%,100%{border-color:rgba(13,110,253,0.3)}50%{border-color:rgba(13,110,253,0.7)}}
+.status-pill.win{background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);color:var(--green);}
+.status-pill.loss{background:rgba(255,56,96,0.08);border:1px solid rgba(255,56,96,0.25);color:var(--red);}
+.card-time{font-size:10px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
+
+.card-img-wrap{
+  margin:0 14px 12px;border-radius:14px;overflow:hidden;
+  border:1px solid var(--border2);background:var(--bg3);
+  min-height:40px;
+}
+.card-img{width:100%;height:auto;display:block;}
+.card-img-ph{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:20px;color:var(--silver);opacity:0.4;font-size:13px;
+}
+
+.card-body{padding:0 14px 14px;}
+.card-meta{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.meta-line{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--light);
+}
+.meta-line .lbl{color:var(--silver);font-size:10px;min-width:38px;}
+.targets-label{
+  font-size:9px;color:var(--silver);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:7px;
+  font-family:'IBM Plex Mono',monospace;
+}
+.targets-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.target-pill{
+  background:rgba(0,229,160,0.07);border:1px solid rgba(0,229,160,0.18);
+  border-radius:8px;padding:5px 10px;
+  font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--green);
+}
+.warn-box{
+  display:flex;align-items:flex-start;gap:7px;
+  background:rgba(255,208,96,0.05);border:1px solid rgba(255,208,96,0.15);
+  border-radius:10px;padding:9px 11px;
+  font-size:11px;color:rgba(255,208,96,0.8);line-height:1.5;
+}
+
+/* ─── PERFORMANCE ─── */
+.perf-hero{
+  background:linear-gradient(160deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border);border-radius:20px;
+  padding:28px 20px;margin-bottom:14px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.perf-hero::before{
+  content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(13,110,253,0.15),transparent 70%);
+}
+.perf-val{
+  font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--green),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;position:relative;
+}
+.perf-val-label{font-size:11px;color:var(--silver);margin-top:6px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;}
+.perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.perf-card{
+  background:linear-gradient(160deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border2);border-radius:16px;padding:16px 14px;
+}
+.perf-card-val{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;
+  margin-bottom:2px;
+}
+.perf-card-val.g{color:var(--green);}
+.perf-card-val.r{color:var(--red);}
+.perf-card-val.b{color:var(--blue3);}
+.perf-card-label{font-size:10px;color:var(--silver);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;}
+
+.bars-card{
+  background:linear-gradient(160deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border2);border-radius:16px;
+  padding:18px;margin-bottom:14px;
+}
+.sec-hd{font-size:10px;color:var(--silver);letter-spacing:2px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;margin-bottom:16px;}
+.bars{display:flex;align-items:flex-end;gap:10px;height:80px;}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+.bar{width:100%;border-radius:6px 6px 0 0;transition:height 0.5s ease;}
+.bar-label{font-size:9px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
+.bar-num{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--light);}
+
+/* ─── PROFILE ─── */
+.profile-hero{
+  background:linear-gradient(160deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border);border-radius:20px;
+  padding:24px 20px;margin-bottom:12px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.profile-hero::before{
+  content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(13,110,253,0.1),transparent 70%);
+}
+.avatar{
+  width:70px;height:70px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  margin:0 auto 12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:32px;color:white;
+  border:2px solid rgba(110,168,254,0.3);
+  box-shadow:0 0 30px rgba(13,110,253,0.2);
+  position:relative;
+}
+.p-name{font-family:'Cairo',sans-serif;font-size:20px;font-weight:700;margin-bottom:3px;}
+.p-phone{font-size:11px;color:var(--blue3);letter-spacing:2px;font-family:'IBM Plex Mono',monospace;}
+
+.info-card{
+  background:linear-gradient(160deg,var(--bg2),var(--bg1));
+  border:1px solid var(--border2);border-radius:14px;
+  padding:14px 16px;margin-bottom:9px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:all 0.2s;
+}
+.info-card:active{transform:scale(0.98);}
+.info-left{display:flex;align-items:center;gap:12px;}
+.info-icon{
+  width:36px;height:36px;border-radius:11px;
+  background:rgba(13,110,253,0.1);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.info-label{font-size:13px;font-weight:600;}
+.info-desc{font-size:11px;color:var(--silver);margin-top:2px;}
+.badge-active{
+  font-size:9px;font-family:'IBM Plex Mono',monospace;
+  color:var(--green);background:rgba(0,229,160,0.08);
+  border:1px solid rgba(0,229,160,0.2);padding:3px 9px;border-radius:20px;
+  letter-spacing:1px;
+}
+.logout-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px;color:var(--red);font-size:13px;cursor:pointer;
+  border-radius:12px;transition:all 0.2s;border:1px solid transparent;
+  font-family:'Cairo',sans-serif;font-weight:600;
+}
+.logout-btn:hover{background:rgba(255,56,96,0.06);border-color:rgba(255,56,96,0.15);}
+
+/* ─── MODAL ─── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  z-index:200;display:none;align-items:flex-end;
+  justify-content:center;max-width:430px;margin:0 auto;
+}
+.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg1) 100%);
+  border:1px solid var(--border);border-radius:28px 28px 0 0;
+  width:100%;padding:20px 20px 40px;
+  animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+  max-height:88vh;overflow-y:auto;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:40px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin:0 auto 20px;}
+.modal-title{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;
+  margin-bottom:14px;color:var(--white);
+}
+.modal-img{
+  width:100%;max-height:220px;border-radius:16px;border:1px solid var(--border2);
+  object-fit:cover;display:block;margin-bottom:14px;
+}
+.detail-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:1px solid var(--border2);font-size:13px;
+}
+.detail-row:last-of-type{border-bottom:none;}
+.dk{color:var(--silver);}
+.dv{font-family:'IBM Plex Mono',monospace;font-weight:500;}
+.dv.call{color:var(--green);}
+.dv.put{color:var(--red);}
+.dv.gold{color:var(--gold);}
+
+/* ─── EMPTY / TOAST ─── */
+.empty{text-align:center;padding:48px 20px;color:var(--silver);}
+.empty .ico{font-size:36px;margin-bottom:10px;display:block;opacity:0.5;}
+.empty p{font-size:13px;font-family:'IBM Plex Mono',monospace;}
+
+.toast{
+  position:fixed;bottom:95px;left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:var(--bg2);border:1px solid rgba(0,229,160,0.25);
+  border-radius:12px;padding:11px 22px;
+  font-size:12px;color:var(--green);z-index:999;
+  opacity:0;transition:all 0.3s;pointer-events:none;
+  white-space:nowrap;font-family:'IBM Plex Mono',monospace;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{border-color:rgba(255,56,96,0.25);color:var(--red);}
 </style>
+
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- ══ SPLASH ══ -->
 <div class="screen show" id="splash">
-  <div class="splash-logo">MOD</div>
-  <div class="splash-sub">OPTIONS SIGNALS</div>
+  <div class="splash-ring">
+    <div class="splash-logo-inner">MOD</div>
+  </div>
+  <div class="splash-tagline">OPTIONS SIGNALS</div>
+  <div class="splash-bar"></div>
 </div>
 
-<!-- LOGIN -->
+<!-- ══ LOGIN ══ -->
 <div class="screen" id="loginScreen">
-  <div class="auth-box">
-    <div class="auth-logo">MOD</div>
-    <div class="auth-sub">OPTIONS SIGNALS</div>
-    <div class="auth-title">تسجيل الدخول</div>
-    <div class="inp-group">
-      <label class="inp-label">رقم الجوال</label>
-      <input class="inp ltr" id="lPhone" type="tel" placeholder="05XXXXXXXX" maxlength="10">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo-wrap">
+        <div class="auth-logo">MOD</div>
+        <div class="auth-sub">OPTIONS SIGNALS</div>
+      </div>
+      <div class="auth-title">تسجيل الدخول</div>
+      <div class="field">
+        <label class="field-label">رقم الجوال</label>
+        <input class="field-input ltr" id="lPhone" type="tel" placeholder="05XXXXXXXX" maxlength="10">
+      </div>
+      <div class="field">
+        <label class="field-label">كود التفعيل</label>
+        <input class="field-input mono" id="lCode" type="text" placeholder="XXXXXXXX" maxlength="12" oninput="this.value=this.value.toUpperCase()">
+        <div class="field-err" id="lErr">رقم الجوال أو الكود غلط</div>
+      </div>
+      <button class="btn-primary" onclick="doLogin()">دخول</button>
+      <div class="auth-switch">ما عندك حساب؟ <a onclick="showScreen('registerScreen')">سجل الآن</a></div>
     </div>
-    <div class="inp-group">
-      <label class="inp-label">كود التفعيل</label>
-      <input class="inp code" id="lCode" type="text" placeholder="XXXXXXXX" maxlength="12" oninput="this.value=this.value.toUpperCase()">
-      <div class="err" id="lErr">رقم الجوال أو الكود غلط</div>
-    </div>
-    <button class="auth-btn" onclick="doLogin()">دخول</button>
-    <div class="auth-switch">ما عندك حساب؟ <a onclick="showScreen('registerScreen')">سجل الآن</a></div>
   </div>
 </div>
 
-<!-- REGISTER -->
+<!-- ══ REGISTER ══ -->
 <div class="screen" id="registerScreen">
-  <div class="auth-box">
-    <div class="auth-logo">MOD</div>
-    <div class="auth-sub">OPTIONS SIGNALS</div>
-    <div class="auth-title">إنشاء حساب جديد</div>
-    <div class="inp-group">
-      <label class="inp-label">الاسم الكامل</label>
-      <input class="inp" id="rName" type="text" placeholder="محمد العمري">
-      <div class="err" id="rNameErr">أدخل اسمك الكامل</div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo-wrap">
+        <div class="auth-logo">MOD</div>
+        <div class="auth-sub">OPTIONS SIGNALS</div>
+      </div>
+      <div class="auth-title">إنشاء حساب جديد</div>
+      <div class="field">
+        <label class="field-label">الاسم الكامل</label>
+        <input class="field-input" id="rName" type="text" placeholder="محمد العمري">
+        <div class="field-err" id="rNameErr">أدخل اسمك الكامل</div>
+      </div>
+      <div class="field">
+        <label class="field-label">رقم الجوال</label>
+        <input class="field-input ltr" id="rPhone" type="tel" placeholder="05XXXXXXXX" maxlength="10">
+        <div class="field-err" id="rPhoneErr">أدخل رقم جوال صحيح</div>
+      </div>
+      <div class="field">
+        <label class="field-label">كود التفعيل (من سلة)</label>
+        <input class="field-input mono" id="rCode" type="text" placeholder="XXXXXXXX" maxlength="12" oninput="this.value=this.value.toUpperCase()">
+        <div class="field-err" id="rCodeErr">أدخل كود التفعيل</div>
+      </div>
+      <button class="btn-primary" onclick="doRegister()">إرسال الطلب</button>
+      <div class="auth-switch">عندك حساب؟ <a onclick="showScreen('loginScreen')">سجل دخول</a></div>
     </div>
-    <div class="inp-group">
-      <label class="inp-label">رقم الجوال</label>
-      <input class="inp ltr" id="rPhone" type="tel" placeholder="05XXXXXXXX" maxlength="10">
-      <div class="err" id="rPhoneErr">أدخل رقم جوال صحيح</div>
-    </div>
-    <div class="inp-group">
-      <label class="inp-label">كود التفعيل (من سلة)</label>
-      <input class="inp code" id="rCode" type="text" placeholder="XXXXXXXX" maxlength="12" oninput="this.value=this.value.toUpperCase()">
-      <div class="err" id="rCodeErr">أدخل كود التفعيل</div>
-    </div>
-    <button class="auth-btn" onclick="doRegister()">إرسال الطلب</button>
-    <div class="auth-switch">عندك حساب؟ <a onclick="showScreen('loginScreen')">سجل دخول</a></div>
   </div>
 </div>
 
-<!-- PENDING -->
+<!-- ══ PENDING ══ -->
 <div class="screen" id="pendingScreen">
-  <div class="auth-box">
-    <div class="pending-icon">⏳</div>
-    <div class="pending-title">طلبك قيد المراجعة</div>
-    <div class="pending-sub">سيتم مراجعة طلبك من قِبل الأدمن وتفعيل حسابك قريباً</div>
-    <div class="wait-badge"><div class="wdot"></div><span>في انتظار موافقة الأدمن</span></div>
-    <div class="pending-info" id="pendingInfo"></div>
-    <button class="auth-btn" onclick="checkStatus()">🔄 تحقق من الحالة</button>
-    <button class="ghost-btn" onclick="pendingLogout()">تسجيل خروج</button>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="pending-icon">⏳</div>
+      <div class="pending-title">طلبك قيد المراجعة</div>
+      <div class="pending-sub">سيتم مراجعة طلبك من قِبل الأدمن وتفعيل حسابك قريباً</div>
+      <div class="wait-badge"><div class="wdot"></div><span>PENDING APPROVAL</span></div>
+      <div class="pending-info" id="pendingInfo"></div>
+      <button class="btn-primary" onclick="checkStatus()">🔄 تحقق من الحالة</button>
+      <button class="btn-ghost" onclick="pendingLogout()">تسجيل خروج</button>
+    </div>
   </div>
 </div>
 
@@ -279,89 +678,130 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div id="app">
   <div class="topbar">
     <div>
-      <div class="logo">MOD</div>
-      <span class="logo-sub">Options Signals</span>
+      <div class="top-logo">MOD</div>
+      <span class="top-sub">OPTIONS SIGNALS</span>
     </div>
-    <div class="notif-btn">🔔</div>
+    <div class="notif-btn" id="notifBtn">🔔<div class="notif-dot" id="notifDot"></div></div>
   </div>
 
   <div class="nav-tabs">
-    <div class="tab active" onclick="switchTab('contracts',this,0)"><span>📡</span>العقود</div>
-    <div class="tab" onclick="switchTab('perf',this,1)"><span>📊</span>الأداء</div>
-    <div class="tab" onclick="switchTab('profile',this,2)"><span>👤</span>حسابي</div>
+    <div class="tab active" onclick="switchTab('contracts',0)">
+      <span class="tab-icon">📡</span>العقود
+    </div>
+    <div class="tab" onclick="switchTab('perf',1)">
+      <span class="tab-icon">📊</span>الأداء
+    </div>
+    <div class="tab" onclick="switchTab('profile',2)">
+      <span class="tab-icon">👤</span>حسابي
+    </div>
   </div>
 
   <div class="pages" id="pagesEl">
-    <div class="ptr" id="ptr"><div class="ptr-spin"></div><span>جاري التحديث...</span></div>
+    <div class="ptr" id="ptr"><div class="ptr-spin"></div><span>REFRESHING</span></div>
 
-    <!-- CONTRACTS PAGE -->
+    <!-- CONTRACTS -->
     <div class="page active" id="page-contracts">
       <div class="filter-bar">
-        <button class="filter-btn active" onclick="setFilter('all',this)">الكل</button>
-        <button class="filter-btn" onclick="setFilter('active',this)">● نشط</button>
-        <button class="filter-btn" onclick="setFilter('closed-win',this)">✓ رابح</button>
-        <button class="filter-btn" onclick="setFilter('closed-loss',this)">✗ خاسر</button>
+        <button class="filter-btn active" onclick="setFilter('all',this)">ALL</button>
+        <button class="filter-btn" onclick="setFilter('active',this)">● ACTIVE</button>
+        <button class="filter-btn" onclick="setFilter('closed-win',this)">✓ WIN</button>
+        <button class="filter-btn" onclick="setFilter('closed-loss',this)">✗ LOSS</button>
       </div>
-      <div class="live-badge"><div class="live-dot"></div><span id="liveText">جاري التحميل...</span></div>
-      <div id="contractsList"><div class="empty-state"><span class="icon">⏳</span><p>جاري تحميل العقود...</p></div></div>
+      <div class="live-strip">
+        <div class="live-badge"><div class="live-dot"></div><span id="liveText">LOADING</span></div>
+        <div class="live-count" id="liveCount"></div>
+      </div>
+      <div id="contractsList">
+        <div class="empty"><span class="ico">⏳</span><p>LOADING CONTRACTS...</p></div>
+      </div>
     </div>
 
-    <!-- PERF PAGE -->
+    <!-- PERFORMANCE -->
     <div class="page" id="page-perf">
       <div class="perf-hero">
-        <div class="perf-rate" id="perfRate">—</div>
-        <div class="perf-rate-label">نسبة الفوز الكلية</div>
+        <div class="perf-val" id="perfRate">—</div>
+        <div class="perf-val-label">WIN RATE</div>
       </div>
       <div class="perf-grid">
-        <div class="perf-card"><div class="perf-card-val green" id="perfWin">—</div><div class="perf-card-label">عقود رابحة</div></div>
-        <div class="perf-card"><div class="perf-card-val red" id="perfLoss">—</div><div class="perf-card-label">عقود خاسرة</div></div>
-        <div class="perf-card"><div class="perf-card-val" id="perfTotal">—</div><div class="perf-card-label">إجمالي العقود</div></div>
-        <div class="perf-card"><div class="perf-card-val green" id="perfActive">—</div><div class="perf-card-label">نشطة الآن</div></div>
+        <div class="perf-card">
+          <div class="perf-card-val g" id="perfWin">—</div>
+          <div class="perf-card-label">WINS</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-val r" id="perfLoss">—</div>
+          <div class="perf-card-label">LOSSES</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-val b" id="perfTotal">—</div>
+          <div class="perf-card-label">TOTAL</div>
+        </div>
+        <div class="perf-card">
+          <div class="perf-card-val b" id="perfActive">—</div>
+          <div class="perf-card-label">ACTIVE</div>
+        </div>
       </div>
-      <div class="month-chart">
-        <div class="sec-title">توزيع العقود</div>
+      <div class="bars-card">
+        <div class="sec-hd">DISTRIBUTION</div>
         <div class="bars" id="perfBars"></div>
       </div>
     </div>
 
-    <!-- PROFILE PAGE -->
+    <!-- PROFILE -->
     <div class="page" id="page-profile">
-      <div class="profile-header">
+      <div class="profile-hero">
         <div class="avatar" id="pAvatar">م</div>
-        <div class="profile-name" id="pName">—</div>
-        <div class="profile-role" id="pPhone">—</div>
+        <div class="p-name" id="pName">—</div>
+        <div class="p-phone" id="pPhone">—</div>
       </div>
-      <div class="sub-card">
-        <div class="sub-card-left">
-          <div class="sub-icon">👑</div>
-          <div><div class="sub-label">عضوية MOD</div><div class="sub-desc" id="pExpiry">—</div></div>
+      <div class="info-card">
+        <div class="info-left">
+          <div class="info-icon">👑</div>
+          <div>
+            <div class="info-label">عضوية MOD</div>
+            <div class="info-desc" id="pExpiry">اشتراك نشط</div>
+          </div>
         </div>
-        <div class="sub-active">نشط</div>
+        <div class="badge-active">ACTIVE</div>
       </div>
-      <div class="sub-card">
-        <div class="sub-card-left">
-          <div class="sub-icon">🛒</div>
-          <div><div class="sub-label">تجديد الاشتراك</div><div class="sub-desc">عبر متجر سلة</div></div>
+      <div class="info-card" onclick="window.open('https://s.salla.sa','_blank')">
+        <div class="info-left">
+          <div class="info-icon">🛒</div>
+          <div>
+            <div class="info-label">تجديد الاشتراك</div>
+            <div class="info-desc">عبر متجر سلة</div>
+          </div>
         </div>
-        <div class="sub-arrow">‹</div>
+        <div style="color:var(--silver);font-size:16px">‹</div>
       </div>
-      <div class="sub-card">
-        <div class="sub-card-left">
-          <div class="sub-icon">🔔</div>
-          <div><div class="sub-label">الإشعارات</div><div class="sub-desc">فورية عند نشر عقد جديد</div></div>
+      <div class="info-card" id="notifCard">
+        <div class="info-left">
+          <div class="info-icon">🔔</div>
+          <div>
+            <div class="info-label">الإشعارات</div>
+            <div class="info-desc" id="notifStatus">جاري التفعيل...</div>
+          </div>
         </div>
-        <div style="width:44px;height:26px;background:var(--blue);border-radius:20px;position:relative">
-          <div style="position:absolute;left:4px;top:3px;width:20px;height:20px;background:white;border-radius:50%"></div>
+        <div id="notifToggle" style="width:42px;height:24px;background:var(--bg4);border-radius:20px;position:relative;border:1px solid var(--border)">
+          <div id="notifToggleDot" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:var(--silver);border-radius:50%;transition:all 0.3s"></div>
         </div>
       </div>
-      <div class="logout-row" onclick="doLogout()"><span>🚪</span> تسجيل الخروج</div>
+      <div class="logout-btn" onclick="doLogout()">🚪 تسجيل الخروج</div>
     </div>
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item active" id="bn0" onclick="switchTab('contracts',null,0)"><div class="nav-icon">📡</div><div class="nav-label">العقود</div></div>
-    <div class="nav-item" id="bn1" onclick="switchTab('perf',null,1)"><div class="nav-icon">📊</div><div class="nav-label">الأداء</div></div>
-    <div class="nav-item" id="bn2" onclick="switchTab('profile',null,2)"><div class="nav-icon">👤</div><div class="nav-label">حسابي</div></div>
+    <div class="nav-item active" id="bn0" onclick="switchTab('contracts',0)">
+      <div class="nav-icon">📡</div>
+      <div class="nav-label">العقود</div>
+    </div>
+    <div class="nav-item" id="bn1" onclick="switchTab('perf',1)">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">الأداء</div>
+    </div>
+    <div class="nav-item" id="bn2" onclick="switchTab('profile',2)">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">حسابي</div>
+    </div>
   </div>
 </div>
 
@@ -370,7 +810,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle"></div>
-    <div class="modal-img-wrap" id="modalImg"></div>
+    <div id="modalImgWrap"></div>
     <div id="modalDetails"></div>
   </div>
 </div>
@@ -378,124 +818,123 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="toast" id="toast"></div>
 
 <script>
-const API = 'https://web-production-beb44.up.railway.app';
-let contracts = [];
-let curFilter = 'all';
-let user = null;
+// ══ CONFIG ══
+const API  = 'https://web-production-beb44.up.railway.app';
+const FB   = {
+  apiKey:            "AIzaSyDXY3ZTUpPAi2iL3Y_XvQReqneomTbYbd0",
+  authDomain:        "mod-options-lmql3k.firebaseapp.com",
+  projectId:         "mod-options-lmql3k",
+  storageBucket:     "mod-options-lmql3k.firebasestorage.app",
+  messagingSenderId: "764195037121",
+  appId:             "1:764195037121:web:2cae80f08af37921f3d940"
+};
+const VAPID = "BCwRaYBP7i8xlHHW7XuVTksmRdchEuKej8ZrzlBMizm7bsoQWM0bXxiviuk9u5PNLCnnrdr2HqHpKlM40nMjOWQ";
 
+// ══ STATE ══
+let contracts = [], curFilter = 'all', user = null, messaging = null;
 const save = (k,v) => { try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} };
 const load = k => { try{return JSON.parse(localStorage.getItem(k))}catch(e){return null} };
 
-// ── INIT ──
+// ══ INIT ══
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     document.getElementById('splash').classList.remove('show');
     user = load('mod_user');
-    if (user?.status === 'approved') { showApp(); }
+    if (user?.status === 'approved') showApp();
     else if (user?.status === 'pending') { renderPending(); showScreen('pendingScreen'); }
-    else { showScreen('loginScreen'); }
-  }, 1600);
+    else showScreen('loginScreen');
+  }, 1800);
 });
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
   document.getElementById(id).classList.add('show');
 }
 
 function showApp() {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
   document.getElementById('app').classList.add('show');
   renderProfile();
   loadContracts();
   setInterval(loadContracts, 30000);
   initPTR();
-  initNotifications();
+  initFCM();
 }
 
-// ── LOGIN ──
+// ══ LOGIN ══
 async function doLogin() {
   const phone = document.getElementById('lPhone').value.trim();
   const code  = document.getElementById('lCode').value.trim().toUpperCase();
   const err   = document.getElementById('lErr');
   err.classList.remove('show');
   if (!phone || !code) { err.textContent='أدخل رقم الجوال وكود التفعيل'; err.classList.add('show'); return; }
-
+  const btn = document.querySelector('#loginScreen .btn-primary');
+  btn.textContent = '...'; btn.disabled = true;
   try {
-    const res  = await fetch(`${API}/login`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ phone })
-    });
+    const res  = await fetch(`${API}/login`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
     const json = await res.json();
-    if (json.code === 'PENDING') { user={phone,code,status:'pending'}; save('mod_user',user); renderPending(); showScreen('pendingScreen'); return; }
+    if (json.code === 'PENDING') {
+      user = {phone, code, name:'—', status:'pending'};
+      save('mod_user', user); renderPending(); showScreen('pendingScreen'); return;
+    }
     if (json.code === 'EXPIRED') { err.textContent='انتهت صلاحية الاشتراك'; err.classList.add('show'); return; }
     if (json.code === 'REJECTED') { err.textContent='تم رفض طلبك'; err.classList.add('show'); return; }
     if (!json.success) { err.textContent='رقم الجوال غير مسجل'; err.classList.add('show'); return; }
-    user = { ...json.user, token: json.token };
+    user = {...json.user, token: json.token};
     save('mod_user', user);
     showApp();
   } catch(e) {
     err.textContent='تعذر الاتصال بالسيرفر'; err.classList.add('show');
+  } finally {
+    btn.textContent = 'دخول'; btn.disabled = false;
   }
 }
 
-// ── REGISTER ──
-function doRegister() {
+// ══ REGISTER ══
+async function doRegister() {
   const name  = document.getElementById('rName').value.trim();
   const phone = document.getElementById('rPhone').value.trim();
   const code  = document.getElementById('rCode').value.trim().toUpperCase();
-  let ok=true;
-  ['rNameErr','rPhoneErr','rCodeErr'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  ['rNameErr','rPhoneErr','rCodeErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+  let ok = true;
   if (!name)           { document.getElementById('rNameErr').classList.add('show'); ok=false; }
   if (phone.length<10) { document.getElementById('rPhoneErr').classList.add('show'); ok=false; }
   if (!code)           { document.getElementById('rCodeErr').classList.add('show'); ok=false; }
   if (!ok) return;
-
-  const newUser = {name, phone, code, status:'pending', registeredAt:new Date().toISOString()};
-  const users = load('mod_users')||{};
-  users[phone] = newUser;
-  save('mod_users', users);
-  fetch(`${API}/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(newUser)}).catch(()=>{});
+  const newUser = {name, phone, code, status:'pending', registeredAt: new Date().toISOString()};
+  try { await fetch(`${API}/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(newUser)}); } catch{}
   user = newUser; save('mod_user', newUser);
   renderPending(); showScreen('pendingScreen');
 }
 
-// ── PENDING ──
+// ══ PENDING ══
 function renderPending() {
   if (!user) return;
   document.getElementById('pendingInfo').innerHTML = `
-    <div class="pi-row"><span class="pi-key">الاسم</span><span class="pi-val">${user.name}</span></div>
+    <div class="pi-row"><span class="pi-key">الاسم</span><span class="pi-val">${user.name||'—'}</span></div>
     <div class="pi-row"><span class="pi-key">الجوال</span><span class="pi-val">${user.phone}</span></div>
-    <div class="pi-row"><span class="pi-key">الكود</span><span class="pi-val">${user.code}</span></div>
-    <div class="pi-row"><span class="pi-key">الحالة</span><span class="pi-val" style="color:var(--gold)">قيد المراجعة</span></div>`;
+    <div class="pi-row"><span class="pi-key">الكود</span><span class="pi-val">${user.code||'—'}</span></div>
+    <div class="pi-row"><span class="pi-key">الحالة</span><span class="pi-val" style="color:var(--gold)">PENDING</span></div>`;
 }
 
 async function checkStatus() {
   if (!user) return;
-  showToast('🔄 جاري التحقق...');
+  showToast('🔄 CHECKING...');
   try {
-    const res  = await fetch(`${API}/login`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ phone: user.phone })
-    });
+    const res  = await fetch(`${API}/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:user.phone})});
     const json = await res.json();
     if (json.success) {
-      user = { ...json.user, token: json.token };
+      user = {...json.user, token: json.token};
       save('mod_user', user);
       showToast('✅ تم قبول طلبك!');
-      setTimeout(()=>showApp(), 1000);
-    } else {
-      showToast('⏳ لم يتم القبول بعد');
-    }
-  } catch {
-    showToast('⏳ لم يتم القبول بعد');
-  }
+      setTimeout(() => showApp(), 1000);
+    } else showToast('⏳ لم يتم القبول بعد');
+  } catch { showToast('⏳ لم يتم القبول بعد'); }
 }
 
 function pendingLogout() { save('mod_user',null); user=null; showScreen('loginScreen'); }
 
-// ── LOGOUT ──
+// ══ LOGOUT ══
 function doLogout() {
   if (!confirm('تأكيد تسجيل الخروج؟')) return;
   save('mod_user',null); user=null;
@@ -503,217 +942,237 @@ function doLogout() {
   showScreen('loginScreen');
 }
 
-// ── PROFILE ──
+// ══ PROFILE ══
 function renderProfile() {
   if (!user) return;
   document.getElementById('pAvatar').textContent = user.name?.[0] || 'م';
   document.getElementById('pName').textContent   = user.name || '—';
   document.getElementById('pPhone').textContent  = user.phone || '—';
-  if (user.expiryDate) {
-    const d = new Date(user.expiryDate);
+  if (user.expiryDate || user.expiry_date) {
+    const d = new Date(user.expiryDate || user.expiry_date);
     document.getElementById('pExpiry').textContent = 'تنتهي في ' + d.toLocaleDateString('ar-SA');
-  } else {
-    document.getElementById('pExpiry').textContent = 'اشتراك نشط';
   }
 }
 
-// ── CONTRACTS ──
+// ══ CONTRACTS ══
 async function loadContracts() {
   try {
     const res  = await fetch(`${API}/contracts`, {
-      headers: { 'Authorization': user?.token || '', 'x-phone': user?.phone || '' }
+      headers: {'Authorization': user?.token||'', 'x-phone': user?.phone||''}
     });
     const json = await res.json();
     contracts  = json.contracts || [];
-    renderContracts();
-    renderPerf();
-    updateLive();
+    renderContracts(); renderPerf(); updateLive();
   } catch {
     if (!contracts.length)
       document.getElementById('contractsList').innerHTML =
-        `<div class="empty-state"><span class="icon">📡</span><p>تعذر الاتصال بالسيرفر</p></div>`;
+        '<div class="empty"><span class="ico">📡</span><p>CONNECTION ERROR</p></div>';
   }
 }
 
 function updateLive() {
-  const active = contracts.filter(c=>c.status==='active').length;
-  document.getElementById('liveText').textContent =
-    active>0 ? `LIVE · ${active} عقد نشط` : 'لا توجد عقود نشطة';
+  const active = contracts.filter(c => c.status === 'active').length;
+  document.getElementById('liveText').textContent  = active > 0 ? `LIVE · ${active}` : 'NO ACTIVE';
+  document.getElementById('liveCount').textContent = `${contracts.length} TOTAL`;
 }
 
 function setFilter(f, btn) {
   curFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderContracts();
 }
 
 function renderContracts() {
-  const list = curFilter==='all' ? contracts : contracts.filter(c=>c.status===curFilter);
+  const list = curFilter === 'all' ? contracts : contracts.filter(c => c.status === curFilter);
   const el   = document.getElementById('contractsList');
-  if (!list.length) { el.innerHTML=`<div class="empty-state"><span class="icon">📋</span><p>لا توجد عقود</p></div>`; return; }
-  el.innerHTML = list.map(c => contractHTML(c, contracts.indexOf(c))).join('');
+  if (!list.length) { el.innerHTML='<div class="empty"><span class="ico">📋</span><p>NO CONTRACTS</p></div>'; return; }
+  el.innerHTML = list.map((c, i) => cardHTML(c, contracts.indexOf(c))).join('');
 }
 
-function contractHTML(c, idx) {
-  const call = c.type==='CALL';
-  const img  = c.image_url
-    ? `<img src="${c.image_url}" class="contract-img" onerror="this.parentElement.innerHTML='<div class=contract-img-ph><div class=icon>📋</div><p>صورة العقد</p></div>'">`
-    : `<div class="contract-img-ph"><div class="icon">📋</div><p>صورة العقد</p></div>`;
-  const st   = {
-    'active':      `<div class="status-pill active-now">● نشط</div>`,
-    'closed-win':  `<div class="status-pill closed-win">✓ مغلق</div>`,
-    'closed-loss': `<div class="status-pill closed-loss">✗ مغلق</div>`,
-  }[c.status] || `<div class="status-pill active-now">● نشط</div>`;
-  const targets = (c.targets||[]).map(t=>`<div class="target-pill">${t}</div>`).join('');
+function cardHTML(c, idx) {
+  const call = c.type === 'CALL';
+  const statusMap = {
+    'active':      `<div class="status-pill active-now">● LIVE</div>`,
+    'closed-win':  `<div class="status-pill win">✓ WIN</div>`,
+    'closed-loss': `<div class="status-pill loss">✗ LOSS</div>`,
+  };
+  const st  = statusMap[c.status] || statusMap['active'];
+  const img = c.image_url
+    ? `<div class="card-img-wrap"><img src="${c.image_url}" class="card-img" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-ph>📋 صورة العقد</div>'"></div>`
+    : '';
+  const tgts = (c.targets||[]).map(t => `<div class="target-pill">${t}</div>`).join('');
   return `
   <div class="signal-card ${c.status==='active'?'hot':''}" onclick="openModal(${idx})">
-    <div class="signal-header">
+    <div class="card-top">
       <div>
-        <div class="signal-ticker">${c.ticker}</div>
-        <div class="signal-type-badge ${call?'call':'put'}">${call?'▲ CALL':'▼ PUT'}</div>
+        <div class="card-ticker">${c.ticker}</div>
+        <div class="card-type ${call?'call':'put'}">${call?'▲ CALL':'▼ PUT'}</div>
       </div>
-      <div class="signal-status">${st}<div class="signal-time">${fmtTime(c.timestamp)}</div></div>
+      <div class="card-right">${st}<div class="card-time">${fmtTime(c.timestamp||c.created_at)}</div></div>
     </div>
-    <div class="contract-img-wrap">${img}</div>
-    <div class="contract-body">
-      <div class="contract-meta">
-        <div class="meta-row"><span>${call?'📈':'📉'}</span>${c.ticker} ${c.type} <strong style="color:var(--white)">${c.strike}</strong></div>
-        ${c.exp?`<div class="meta-row"><span>📅</span>Exp: ${c.exp}</div>`:''}
-        ${c.entry?`<div class="meta-row"><span>💵</span>Entry: <strong style="color:var(--gold)">${c.entry}</strong></div>`:''}
+    ${img}
+    <div class="card-body">
+      <div class="card-meta">
+        ${c.strike?`<div class="meta-line"><span class="lbl">STRIKE</span><strong>${c.ticker} ${c.strike}</strong></div>`:''}
+        ${c.exp||c.expiry?`<div class="meta-line"><span class="lbl">EXP</span>${c.exp||c.expiry}</div>`:''}
+        ${c.entry?`<div class="meta-line"><span class="lbl">ENTRY</span><strong style="color:var(--gold)">${c.entry}</strong></div>`:''}
       </div>
-      ${targets?`<div class="targets-label">🎯 الأهداف</div><div class="targets-row">${targets}</div>`:''}
-      <div class="warning-box"><span>⚠️</span><span>عند تحقيق أي هدف، يُفضل جني الأرباح أو وضع وقف عند الهدف المحقق</span></div>
+      ${tgts?`<div class="targets-label">🎯 TARGETS</div><div class="targets-row">${tgts}</div>`:''}
+      <div class="warn-box"><span>⚠️</span><span>عند تحقيق أي هدف، يُفضل جني الأرباح أو وضع وقف عند الهدف المحقق</span></div>
     </div>
   </div>`;
 }
 
-// ── MODAL ──
+// ══ MODAL ══
 function openModal(idx) {
-  const c = contracts[idx]; if(!c) return;
-  const call = c.type==='CALL';
+  const c = contracts[idx]; if (!c) return;
+  const call = c.type === 'CALL';
   document.getElementById('modalTitle').textContent = `${c.ticker} · ${c.type}`;
-  document.getElementById('modalImg').innerHTML = c.image_url
-    ? `<img src="${c.image_url}" style="width:100%;height:100%;object-fit:cover;display:block;">`
-    : `<div class="contract-img-ph"><div class="icon" style="font-size:40px;opacity:0.3">📋</div></div>`;
-  document.getElementById('modalDetails').innerHTML = [
-    {k:'نوع العقد',v:c.type,cls:call?'call':'put'},
-    {k:'Strike Price',v:c.strike},
-    {k:'تاريخ الانتهاء',v:c.exp},
-    {k:'سعر الدخول',v:c.entry,cls:'gold'},
-    ...(c.targets||[]).map((t,i)=>({k:`الهدف ${i+1}`,v:t})),
-  ].filter(d=>d.v).map(d=>`<div class="detail-row"><span class="detail-key">${d.k}</span><span class="detail-val ${d.cls||''}">${d.v}</span></div>`).join('');
+  document.getElementById('modalImgWrap').innerHTML = c.image_url
+    ? `<img src="${c.image_url}" class="modal-img">`
+    : '';
+  const details = [
+    {k:'النوع', v:c.type, cls: call?'call':'put'},
+    {k:'Strike', v:c.strike},
+    {k:'Expiry', v:c.exp||c.expiry},
+    {k:'Entry',  v:c.entry, cls:'gold'},
+    ...(c.targets||[]).map((t,i) => ({k:`Target ${i+1}`, v:t})),
+  ].filter(d => d.v);
+  document.getElementById('modalDetails').innerHTML =
+    details.map(d => `<div class="detail-row"><span class="dk">${d.k}</span><span class="dv ${d.cls||''}">${d.v}</span></div>`).join('');
   document.getElementById('modal').classList.add('show');
 }
 function closeModal() { document.getElementById('modal').classList.remove('show'); }
 
-// ── PERFORMANCE ──
+// ══ PERFORMANCE ══
 function renderPerf() {
   const total  = contracts.length;
-  const active = contracts.filter(c=>c.status==='active').length;
-  const win    = contracts.filter(c=>c.status==='closed-win').length;
-  const loss   = contracts.filter(c=>c.status==='closed-loss').length;
-  const closed = win+loss;
+  const active = contracts.filter(c => c.status==='active').length;
+  const win    = contracts.filter(c => c.status==='closed-win').length;
+  const loss   = contracts.filter(c => c.status==='closed-loss').length;
+  const closed = win + loss;
   const rate   = closed ? Math.round(win/closed*100) : 0;
-  document.getElementById('perfRate').textContent  = closed?rate+'%':'—';
+  document.getElementById('perfRate').textContent  = closed ? rate+'%' : '—';
   document.getElementById('perfWin').textContent   = win;
   document.getElementById('perfLoss').textContent  = loss;
   document.getElementById('perfTotal').textContent = total;
   document.getElementById('perfActive').textContent= active;
   const bars = document.getElementById('perfBars');
-  if (!total) { bars.innerHTML=`<div style="color:var(--silver);font-size:12px;width:100%;text-align:center">لا توجد بيانات بعد</div>`; return; }
+  if (!total) { bars.innerHTML='<div style="color:var(--silver);font-size:11px;font-family:IBM Plex Mono;width:100%;text-align:center">NO DATA</div>'; return; }
   bars.innerHTML = [
-    {label:'نشط',val:active,color:'var(--blue)'},
-    {label:'رابح',val:win,  color:'var(--green)'},
-    {label:'خاسر',val:loss, color:'var(--red)'},
-  ].map(b=>{
-    const h=total?Math.max(4,Math.round(b.val/total*70)):4;
-    return `<div class="bar-wrap"><div class="bar-val">${b.val}</div><div class="bar" style="height:${h}px;background:${b.color};opacity:0.8"></div><div class="bar-label">${b.label}</div></div>`;
+    {label:'ACTIVE', val:active, color:'var(--blue2)'},
+    {label:'WIN',    val:win,    color:'var(--green)'},
+    {label:'LOSS',   val:loss,   color:'var(--red)'},
+  ].map(b => {
+    const h = total ? Math.max(4, Math.round(b.val/total*70)) : 4;
+    return `<div class="bar-wrap"><div class="bar-num">${b.val}</div><div class="bar" style="height:${h}px;background:${b.color};opacity:0.75"></div><div class="bar-label">${b.label}</div></div>`;
   }).join('');
 }
 
-// ── TABS ──
-function switchTab(name,tab,idx) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+// ══ TABS ══
+function switchTab(name, idx) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.tab')[idx]?.classList.add('active');
   document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
 }
 
-// ── PTR ──
+// ══ PTR ══
 function initPTR() {
-  const el=document.getElementById('pagesEl');
-  let sY=0,pulling=false;
-  el.addEventListener('touchstart',e=>{sY=e.touches[0].clientY;},{passive:true});
-  el.addEventListener('touchmove',e=>{
-    if(el.scrollTop>0)return;
-    if(e.touches[0].clientY-sY>60){pulling=true;document.getElementById('ptr').classList.add('show');}
-  },{passive:true});
-  el.addEventListener('touchend',()=>{
-    if(pulling){loadContracts();setTimeout(()=>document.getElementById('ptr').classList.remove('show'),800);}
-    pulling=false;
+  const el = document.getElementById('pagesEl');
+  let sY = 0, pulling = false;
+  el.addEventListener('touchstart', e => { sY = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchmove', e => {
+    if (el.scrollTop > 0) return;
+    if (e.touches[0].clientY - sY > 60) { pulling=true; document.getElementById('ptr').classList.add('show'); }
+  }, {passive:true});
+  el.addEventListener('touchend', () => {
+    if (pulling) { loadContracts(); setTimeout(() => document.getElementById('ptr').classList.remove('show'), 800); }
+    pulling = false;
   });
 }
 
-// ── HELPERS ──
-function fmtTime(ts) {
-  if(!ts) return '';
-  const m=Math.floor((Date.now()-new Date(ts).getTime())/60000);
-  if(m<1) return 'الآن';
-  if(m<60) return `منذ ${m}د`;
-  const h=Math.floor(m/60);
-  if(h<24) return `منذ ${h}س`;
-  return `منذ ${Math.floor(h/24)} يوم`;
-}
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-</script>
+// ══ FCM ══
+async function initFCM() {
+  const statusEl = document.getElementById('notifStatus');
+  const toggle   = document.getElementById('notifToggle');
+  const dot      = document.getElementById('notifToggleDot');
 
-<script>
-// ── Firebase Config ──
-const firebaseConfig = {
-  apiKey: "AIzaSyDXY3ZTUpPAi2iL3Y_XvQReqneomTbYbd0",
-  authDomain: "mod-options-lmql3k.firebaseapp.com",
-  projectId: "mod-options-lmql3k",
-  storageBucket: "mod-options-lmql3k.firebasestorage.app",
-  messagingSenderId: "764195037121",
-  appId: "1:764195037121:web:2cae80f08af37921f3d940"
-};
-
-const VAPID_KEY = "BCwRaYBP7i8xlHHW7XuVTksmRdchEuKej8ZrzlBMizm7bsoQWM0bXxiviuk9u5PNLCnnrdr2HqHpKlM40nMjOWQ";
-
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
-async function initNotifications() {
   try {
-    if (!('Notification' in window)) return;
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') return;
-    if (!('serviceWorker' in navigator)) return;
-    const swPath = location.pathname.replace(/\/[^\/]*$/, '/') + 'firebase-messaging-sw.js';
-    const reg = await navigator.serviceWorker.register(swPath);
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      statusEl.textContent = 'غير مدعوم في هذا المتصفح';
+      return;
+    }
+
+    // Init Firebase
+    firebase.initializeApp(FB);
+    messaging = firebase.messaging();
+
+    // Request permission
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      statusEl.textContent = 'الإشعارات مرفوضة';
+      return;
+    }
+
+    // Register SW with correct path
+    const base  = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\/[^\/]*$/, '/');
+    const swURL = base + 'firebase-messaging-sw.js';
+    const reg   = await navigator.serviceWorker.register(swURL, {scope: base});
     await navigator.serviceWorker.ready;
-    const fcmToken = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+
+    // Get FCM token
+    const fcmToken = await messaging.getToken({ vapidKey: VAPID, serviceWorkerRegistration: reg });
+
     if (fcmToken && user?.token) {
       await fetch(`${API}/fcm-token`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': user.token, 'x-phone': user.phone },
-        body: JSON.stringify({ fcmToken })
+        headers: {'Content-Type':'application/json', 'Authorization': user.token, 'x-phone': user.phone},
+        body: JSON.stringify({fcmToken})
       });
+      // Update toggle UI
+      toggle.style.background = 'var(--blue)';
+      dot.style.right = 'auto'; dot.style.left = '2px';
+      dot.style.background = 'white';
+      statusEl.textContent = 'الإشعارات مفعّلة ✓';
+      document.getElementById('notifDot').classList.remove('show');
     }
-  } catch(e) { console.log('FCM init error:', e); }
+
+    // Foreground message handler
+    messaging.onMessage(payload => {
+      const n = payload.notification;
+      showToast(`🔔 ${n.title}: ${n.body}`);
+      document.getElementById('notifDot').classList.add('show');
+      loadContracts(); // refresh contracts on new signal
+    });
+
+  } catch(e) {
+    console.log('FCM error:', e.message);
+    statusEl.textContent = 'تعذر تفعيل الإشعارات';
+  }
 }
 
-messaging.onMessage((payload) => {
-  const n = payload.notification;
-  showToast(`${n.title}: ${n.body}`);
-});
+// ══ HELPERS ══
+function fmtTime(ts) {
+  if (!ts) return '';
+  const m = Math.floor((Date.now() - new Date(ts).getTime()) / 60000);
+  if (m < 1)  return 'NOW';
+  if (m < 60) return `${m}m AGO`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h AGO`;
+  return `${Math.floor(h/24)}d AGO`;
+}
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast' + (isErr?' err':'');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 </script>
 </body>
 </html>
