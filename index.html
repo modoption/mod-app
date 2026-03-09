@@ -39,14 +39,11 @@
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 body{color:var(--white);font-family:'Cairo',sans-serif;max-width:430px;margin:0 auto;position:relative;}
 
-/* ─── NOISE OVERLAY ─── */
 body::before{
   content:'';position:fixed;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events:none;z-index:0;opacity:0.4;
 }
-
-/* ─── AMBIENT GLOWS ─── */
 body::after{
   content:'';position:fixed;
   top:-20%;right:-10%;width:500px;height:500px;
@@ -54,7 +51,6 @@ body::after{
   pointer-events:none;z-index:0;
 }
 
-/* ─── SCREENS ─── */
 .screen{
   position:fixed;inset:0;max-width:430px;margin:0 auto;
   z-index:50;display:none;flex-direction:column;
@@ -62,7 +58,6 @@ body::after{
 }
 .screen.show{display:flex;}
 
-/* ─── SPLASH ─── */
 #splash{
   background:var(--bg);z-index:100;
   flex-direction:column;align-items:center;justify-content:center;gap:0;
@@ -105,7 +100,6 @@ body::after{
 }
 @keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── AUTH ─── */
 .auth-wrap{width:100%;max-width:380px;}
 .auth-card{
   background:linear-gradient(160deg,var(--bg2) 0%,var(--bg1) 100%);
@@ -197,7 +191,6 @@ body::after{
 .auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--silver);}
 .auth-switch a{color:var(--blue3);cursor:pointer;text-decoration:none;}
 
-/* ─── PENDING ─── */
 .pending-icon{font-size:52px;text-align:center;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .pending-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;text-align:center;margin-bottom:8px;color:var(--gold);}
@@ -222,14 +215,12 @@ body::after{
 .pi-key{color:var(--silver);}
 .pi-val{font-family:'IBM Plex Mono',monospace;color:var(--light);}
 
-/* ─── MAIN APP ─── */
 #app{
   background:var(--bg);display:none;flex-direction:column;
   height:100%;position:fixed;inset:0;max-width:430px;margin:0 auto;z-index:50;
 }
 #app.show{display:flex;}
 
-/* TOPBAR */
 .topbar{
   flex-shrink:0;
   background:rgba(3,8,15,0.95);
@@ -266,7 +257,6 @@ body::after{
 }
 .notif-dot.show{display:block;}
 
-/* NAV TABS */
 .nav-tabs{
   flex-shrink:0;display:flex;
   background:rgba(3,8,15,0.95);
@@ -283,14 +273,12 @@ body::after{
 .tab.active{color:var(--blue3);border-bottom-color:var(--blue);}
 .tab-icon{display:block;font-size:18px;margin-bottom:3px;}
 
-/* PAGES */
 .pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
 .pages::-webkit-scrollbar{width:0;}
 .page{display:none;padding:16px 14px 100px;animation:pageIn 0.3s ease;}
 .page.active{display:block;}
 @keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* PTR */
 .ptr{
   display:flex;align-items:center;justify-content:center;gap:8px;
   height:0;overflow:hidden;transition:height 0.25s;
@@ -304,7 +292,6 @@ body::after{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* BOTTOM NAV */
 .bottom-nav{
   flex-shrink:0;
   background:rgba(3,8,15,0.97);
@@ -327,7 +314,6 @@ body::after{
 .nav-item.active .nav-label{color:var(--blue3);}
 .nav-item.active .nav-icon{filter:drop-shadow(0 0 10px var(--blue2));}
 
-/* ─── CONTRACTS ─── */
 .filter-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;}
 .filter-bar::-webkit-scrollbar{display:none;}
 .filter-btn{
@@ -355,7 +341,6 @@ body::after{
 .live-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1s infinite;}
 .live-count{font-size:10px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
 
-/* CONTRACT CARD */
 .signal-card{
   background:linear-gradient(160deg,var(--bg2) 0%,var(--bg1) 100%);
   border:1px solid var(--border2);border-radius:20px;
@@ -435,7 +420,6 @@ body::after{
   font-size:11px;color:rgba(255,208,96,0.8);line-height:1.5;
 }
 
-/* ─── PERFORMANCE ─── */
 .perf-hero{
   background:linear-gradient(160deg,var(--bg2),var(--bg1));
   border:1px solid var(--border);border-radius:20px;
@@ -480,7 +464,6 @@ body::after{
 .bar-label{font-size:9px;color:var(--silver);font-family:'IBM Plex Mono',monospace;}
 .bar-num{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--light);}
 
-/* ─── PROFILE ─── */
 .profile-hero{
   background:linear-gradient(160deg,var(--bg2),var(--bg1));
   border:1px solid var(--border);border-radius:20px;
@@ -534,7 +517,6 @@ body::after{
 }
 .logout-btn:hover{background:rgba(255,56,96,0.06);border-color:rgba(255,56,96,0.15);}
 
-/* ─── MODAL ─── */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,0.8);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -571,7 +553,6 @@ body::after{
 .dv.put{color:var(--red);}
 .dv.gold{color:var(--gold);}
 
-/* ─── EMPTY / TOAST ─── */
 .empty{text-align:center;padding:48px 20px;color:var(--silver);}
 .empty .ico{font-size:36px;margin-bottom:10px;display:block;opacity:0.5;}
 .empty p{font-size:13px;font-family:'IBM Plex Mono',monospace;}
@@ -1095,7 +1076,7 @@ function initPTR() {
   });
 }
 
-// ══ FCM ══
+// ══ FCM (FIXED) ══
 async function initFCM() {
   const statusEl = document.getElementById('notifStatus');
   const toggle   = document.getElementById('notifToggle');
@@ -1107,8 +1088,10 @@ async function initFCM() {
       return;
     }
 
-    // Init Firebase
-    firebase.initializeApp(FB);
+    // ✅ الإصلاح: تحقق من التهيئة المسبقة
+    if (!firebase.apps.length) {
+      firebase.initializeApp(FB);
+    }
     messaging = firebase.messaging();
 
     // Request permission
@@ -1118,34 +1101,42 @@ async function initFCM() {
       return;
     }
 
-    // Register SW with correct path
-    const swURL = '/mod-app/firebase-messaging-sw.js';
-    const reg   = await navigator.serviceWorker.register(swURL, {scope: '/mod-app/'});
+    // Register SW
+    const base  = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\/[^\/]*$/, '/');
+    const swURL = base + 'firebase-messaging-sw.js';
+    const reg   = await navigator.serviceWorker.register(swURL, {scope: base});
     await navigator.serviceWorker.ready;
 
     // Get FCM token
     const fcmToken = await messaging.getToken({ vapidKey: VAPID, serviceWorkerRegistration: reg });
 
-    if (fcmToken && user?.token) {
+    // ✅ الإصلاح: تحقق من user.token و user.phone قبل الإرسال
+    if (fcmToken && user?.token && user?.phone) {
       await fetch(`${API}/fcm-token`, {
         method: 'POST',
-        headers: {'Content-Type':'application/json', 'Authorization': user.token, 'x-phone': user.phone},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': user.token,
+          'x-phone': user.phone
+        },
         body: JSON.stringify({fcmToken})
       });
-      // Update toggle UI
       toggle.style.background = 'var(--blue)';
-      dot.style.right = 'auto'; dot.style.left = '2px';
+      dot.style.right = 'auto';
+      dot.style.left  = '2px';
       dot.style.background = 'white';
       statusEl.textContent = 'الإشعارات مفعّلة ✓';
       document.getElementById('notifDot').classList.remove('show');
+    } else {
+      statusEl.textContent = 'تعذر تفعيل الإشعارات';
     }
 
-    // Foreground message handler
+    // Foreground messages
     messaging.onMessage(payload => {
       const n = payload.notification;
       showToast(`🔔 ${n.title}: ${n.body}`);
       document.getElementById('notifDot').classList.add('show');
-      loadContracts(); // refresh contracts on new signal
+      loadContracts();
     });
 
   } catch(e) {
