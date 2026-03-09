@@ -809,7 +809,7 @@ const FB   = {
   messagingSenderId: "764195037121",
   appId:             "1:764195037121:web:2cae80f08af37921f3d940"
 };
-const VAPID = "BCwRaYBP7i8xlHHW7XuVTksmRdchEuKej8ZrzlBMizm7bsoQWM0bXxiviuk9u5PNLCnnrdr2HqHpKlM40nMjOWQ";
+const VAPID = "BNcKfH2wqYkSfgRCeXi64btz0FwoHzVM2_Hwrq8RdrCgHWCnK8kZ9NIkhfPeCXo8kKKXUOAqQz6N60OediM5zok";
 
 // ══ STATE ══
 let contracts = [], curFilter = 'all', user = null, messaging = null;
@@ -1088,10 +1088,7 @@ async function initFCM() {
       return;
     }
 
-    // ✅ الإصلاح: تحقق من التهيئة المسبقة
-    if (!firebase.apps.length) {
-      firebase.initializeApp(FB);
-    }
+    if (!firebase.apps.length) { firebase.initializeApp(FB); }
     messaging = firebase.messaging();
 
     // Request permission
