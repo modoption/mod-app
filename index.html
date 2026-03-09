@@ -1119,9 +1119,8 @@ async function initFCM() {
     }
 
     // Register SW with correct path
-    const base  = location.pathname.endsWith('/') ? location.pathname : location.pathname.replace(/\/[^\/]*$/, '/');
-    const swURL = base + 'firebase-messaging-sw.js';
-    const reg   = await navigator.serviceWorker.register(swURL, {scope: base});
+    const swURL = '/mod-app/firebase-messaging-sw.js';
+    const reg   = await navigator.serviceWorker.register(swURL, {scope: '/mod-app/'});
     await navigator.serviceWorker.ready;
 
     // Get FCM token
